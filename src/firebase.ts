@@ -33,7 +33,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Use analytics
-const analytics = getAnalytics(app);
+getAnalytics(app);
 
 // Use authentication
 const auth = getAuth(app);
@@ -54,10 +54,10 @@ export const onAuthStateChangedListener = (
 };
 
 // Initialize Firestore
-const db = getFirestore(app);
+getFirestore(app);
 
 // Use app check
-const appCheck = initializeAppCheck(app, {
+initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider("6LdFT1oqAAAAAKJ8GTXfeSqjYA5zhtC4FPG4BVxs"),
   isTokenAutoRefreshEnabled: true,
 });

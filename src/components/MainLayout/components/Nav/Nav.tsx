@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { useLocation } from "react-router-dom";
 
 import { userAtom } from "@src/atoms";
