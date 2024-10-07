@@ -341,6 +341,10 @@ module.exports = function (webpackEnv) {
           babelRuntimeEntryHelpers,
           babelRuntimeRegenerator,
         ]),
+        /**
+         * Ensures that dev server is uses the same mapping as the TypeScript compiler.
+         *
+         */
         new TsconfigPathsPlugin({
           configFile: path.resolve(__dirname, "../tsconfig.json"), // Path to your tsconfig.json
         }),

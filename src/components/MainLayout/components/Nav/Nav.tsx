@@ -1,10 +1,17 @@
 import { styled } from "styled-components";
+import { useAtom, useAtomValue } from "jotai";
+import { useLocation } from "react-router-dom";
 
-import { LoginLink, HomeLink } from "./components";
+import { userAtom } from "@src/atoms";
+import { paths } from "@src/router";
+import { LoginLink, HomeLink, SignOutButton } from "./components";
 
 const NavHeightInPx = 64;
-const MaxNavItemHeightInPx = NavHeightInPx * 0.5;
-const DefaultNavItemHeightInPx = MaxNavItemHeightInPx;
+
+const NavItemMaxHeightInPx = NavHeightInPx * 0.5;
+const NavItemDefaultHeightInPx = NavItemMaxHeightInPx;
+const NavItemMaxWidthInPx = 128;
+const NavItemDefaultWidthInPx = NavItemMaxWidthInPx * 0.5;
 
 export const Nav = () => {
   const StyledNav = styled.nav`
@@ -15,19 +22,29 @@ export const Nav = () => {
     padding: 0 16px;
     height: ${NavHeightInPx}px;
     gap: 0.8rem;
+    position: sticky;
+    top: 0px;
+    justify-content: space-between;
 
     > * {
-      max-width: 128px;
-      max-height: ${MaxNavItemHeightInPx}px;
-      height: ${DefaultNavItemHeightInPx}px;
+      max-width: ${NavItemMaxWidthInPx}px;
+      width: ${NavItemDefaultWidthInPx}px;
+      max-height: ${NavItemMaxHeightInPx}px;
+      height: ${NavItemDefaultHeightInPx}px;
       background-color: ${({ theme }) =>
         theme.colors.pallete.splitComplementary.left};
     }
   `;
+  const user = useAtomValue(userAtom);
+  const location = useLocation();
   return (
     <StyledNav>
       <HomeLink />
-      <LoginLink />
+      {user ? (
+        <SignOutButton />
+      ) : location.pathname !== paths.login ? (
+        <LoginLink />
+      ) : null}
     </StyledNav>
   );
 };

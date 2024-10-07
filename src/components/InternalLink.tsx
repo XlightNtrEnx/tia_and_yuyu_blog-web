@@ -10,7 +10,8 @@ interface InternalLinkProps {
 export const InternalLink = ({ children, to }: InternalLinkProps) => {
   const StyledLink = styled(Link)`
     text-decoration: none;
-    padding: 0.4rem 0;
+    padding: 0.5rem;
+    line-height: 1;
     text-align: center;
   `;
   return <StyledLink to={to}>{children}</StyledLink>;

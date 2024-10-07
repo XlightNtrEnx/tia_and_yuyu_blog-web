@@ -1,17 +1,8 @@
 // src/styled.d.ts
 import "styled-components";
 
+import { Theme } from "@src/theme";
+
 declare module "styled-components" {
-  export interface DefaultTheme {
-    colors: {
-      pallete: {
-        splitComplementary: {
-          primary: string;
-          complementary: string;
-          left: string;
-          right: string;
-        };
-      };
-    };
-  }
+  export interface DefaultTheme extends Theme {}
 }

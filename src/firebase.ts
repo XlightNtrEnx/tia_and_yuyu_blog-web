@@ -1,6 +1,19 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  browserLocalPersistence,
+  setPersistence,
+  onAuthStateChanged,
+  User,
+  signOut as firebaseSignOut,
+} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -18,4 +31,33 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Use analytics
 const analytics = getAnalytics(app);
+
+// Use authentication
+const auth = getAuth(app);
+const googleAuthProvider = new GoogleAuthProvider();
+setPersistence(auth, browserLocalPersistence);
+export const signInWithGoogle = async () => {
+  const result = await signInWithPopup(auth, googleAuthProvider);
+  return result;
+};
+export const signOut = async () => {
+  await firebaseSignOut(auth);
+};
+export const onAuthStateChangedListener = (
+  callback: (user: User | null) => void
+) => {
+  const unsubscribe = onAuthStateChanged(auth, callback);
+  return unsubscribe;
+};
+
+// Initialize Firestore
+const db = getFirestore(app);
+
+// Use app check
+const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider("6LdFT1oqAAAAAKJ8GTXfeSqjYA5zhtC4FPG4BVxs"),
+  isTokenAutoRefreshEnabled: true,
+});

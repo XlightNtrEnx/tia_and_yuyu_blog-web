@@ -1,8 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { ThemeProvider } from "styled-components";
+import { RouterProvider } from "react-router-dom";
 
 import "@src/css/index.css";
-import App from "@src/App";
+import theme from "@src/theme";
+import router from "@src/router";
+import { FirebaseAuthProvider } from "@src/providers";
 import reportWebVitals from "@src/reportWebVitals";
 
 const root = ReactDOM.createRoot(
@@ -10,7 +14,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <FirebaseAuthProvider>
+      <ThemeProvider theme={theme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </FirebaseAuthProvider>
   </React.StrictMode>
 );
 
