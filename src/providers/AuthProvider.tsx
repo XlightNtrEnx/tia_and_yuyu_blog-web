@@ -8,7 +8,7 @@ interface Props {
   children: ReactNode;
 }
 
-export const FirebaseAuthProvider = ({ children }: Props) => {
+export const AuthProvider = ({ children }: Props) => {
   const setUser = useSetAtom(userAtom);
 
   useEffect(() => {

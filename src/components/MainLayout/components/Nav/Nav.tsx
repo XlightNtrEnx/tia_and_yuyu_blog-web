@@ -13,28 +13,30 @@ const NavItemDefaultHeightInPx = NavItemMaxHeightInPx;
 const NavItemMaxWidthInPx = 128;
 const NavItemDefaultWidthInPx = NavItemMaxWidthInPx * 0.5;
 
-export const Nav = () => {
-  const StyledNav = styled.nav`
-    display: flex;
-    background-color: ${({ theme }) =>
-      theme.colors.pallete.splitComplementary.primary};
-    align-items: center;
-    padding: 0 16px;
-    height: ${NavHeightInPx}px;
-    gap: 0.8rem;
-    position: sticky;
-    top: 0px;
-    justify-content: space-between;
+const StyledNav = styled.nav`
+  display: flex;
+  background-color: ${({ theme }) =>
+    theme.colors.pallete.splitComplementary.primary};
+  align-items: center;
+  width: 100vw;
+  padding: 0 16px;
+  height: ${NavHeightInPx}px;
+  gap: 0.8rem;
+  position: sticky;
+  top: 0px;
+  justify-content: space-between;
 
-    > * {
-      max-width: ${NavItemMaxWidthInPx}px;
-      width: ${NavItemDefaultWidthInPx}px;
-      max-height: ${NavItemMaxHeightInPx}px;
-      height: ${NavItemDefaultHeightInPx}px;
-      background-color: ${({ theme }) =>
-        theme.colors.pallete.splitComplementary.left};
-    }
-  `;
+  > * {
+    max-width: ${NavItemMaxWidthInPx}px;
+    width: ${NavItemDefaultWidthInPx}px;
+    max-height: ${NavItemMaxHeightInPx}px;
+    height: ${NavItemDefaultHeightInPx}px;
+    background-color: ${({ theme }) =>
+      theme.colors.pallete.splitComplementary.left};
+  }
+`;
+
+export const Nav = () => {
   const user = useAtomValue(userAtom);
   const location = useLocation();
   return (

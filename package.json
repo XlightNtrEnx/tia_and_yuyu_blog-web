@@ -70,8 +70,7 @@
   "scripts": {
     "dev": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "deploy": "yarn run build && firebase deploy"
+    "test": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": [

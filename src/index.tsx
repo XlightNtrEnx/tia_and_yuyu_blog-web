@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router-dom";
 import "@src/css/index.css";
 import theme from "@src/theme";
 import router from "@src/router";
-import { FirebaseAuthProvider } from "@src/providers";
+import { AuthProvider } from "@src/providers";
 import reportWebVitals from "@src/reportWebVitals";
 
 const root = ReactDOM.createRoot(
@@ -14,11 +14,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <FirebaseAuthProvider>
+    <AuthProvider>
       <ThemeProvider theme={theme}>
         <RouterProvider router={router} />
       </ThemeProvider>
-    </FirebaseAuthProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
 

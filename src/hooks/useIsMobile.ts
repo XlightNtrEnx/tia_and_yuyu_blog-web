@@ -3,6 +3,9 @@ import { useEffect } from "react";
 
 import { isMobileAtom } from "@src/atoms";
 
+let isListenerAdded = false;
+let componentsOnHookCount = 0;
+
 export const useIsMobile = (): boolean => {
   const [isMobile, setIsMobile] = useAtom(isMobileAtom);
 
@@ -11,11 +14,23 @@ export const useIsMobile = (): boolean => {
       setIsMobile(window.innerWidth < 480);
     };
 
-    window.addEventListener("resize", handleResize);
+    componentsOnHookCount++;
+    if (!isListenerAdded) {
+      window.addEventListener("resize", handleResize);
+      isListenerAdded = true;
+    }
+
+    // Set initial value
+    handleResize();
+
     return () => {
-      window.removeEventListener("resize", handleResize);
+      componentsOnHookCount--;
+      if (isListenerAdded && componentsOnHookCount <= 0) {
+        window.removeEventListener("resize", handleResize);
+        isListenerAdded = false;
+      }
     };
-  });
+  }, [setIsMobile]);
 
   return isMobile;
 };
