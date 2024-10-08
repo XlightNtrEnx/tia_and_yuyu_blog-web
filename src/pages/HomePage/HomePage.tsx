@@ -21,7 +21,8 @@ export const HomePage = () => {
   const user = useAtomValue(userAtom);
   return (
     <Container>
-      {user?.email === "xyf.oco@gmail.com" && <PostComposer />}
+      {(user?.email === "xyf.oco@gmail.com" ||
+        user?.email === "jumpeebungee@gmail.com") && <PostComposer />}
       <Feed />
     </Container>
   );
