@@ -45,6 +45,7 @@ const onSubmit = async (
 ) => {
   e.preventDefault();
   await postService.insert(post);
+  window.location.reload();
 };
 
 export const PostComposer = () => {
