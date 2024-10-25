@@ -5,9 +5,23 @@ enum UserSubPaths {
 }
 
 export class UserService extends BaseService<UserSubPaths> {
-  userId: string = "";
+  _targetUserId: string = "";
+
+  get targetUserId() {
+    return this._targetUserId;
+  }
+
+  set targetUserId(value: string) {
+    this._targetUserId = value;
+  }
+
+  get basePath() {
+    return `${this._basePath}/${this.targetUserId}/`;
+  }
 
   constructor() {
     super(`users/`);
   }
 }
+
+export const userService = new UserService();

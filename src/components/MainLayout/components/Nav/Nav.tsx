@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { userAtom } from "@src/atoms";
 import { paths } from "@src/router";
 import Pochacco from "@src/assets/images/pochacco.png";
+import NoProfilePictureIcon from "@src/assets/icons/no_profile_picture512.png";
 import { Img } from "@src/elements";
 import { LoginLink, HomeLink, SignOutButton } from "./components";
 
@@ -36,21 +37,31 @@ const StyledNav = styled.nav`
     max-height: ${NavItemMaxHeightInPx}px;
     height: ${NavItemDefaultHeightInPx}px;
     background-color: ${({ theme }) => theme.colors.softerWhite};
+    border-radius: 10px;
   }
 `;
 
 const StyledImg = styled(Img)`
+  width: ${NavItemMaxHeightInPx}px;
+  height: ${NavItemMaxHeightInPx}px;
   border-radius: 50%;
 `;
 
 export const Nav = () => {
   const user = useAtomValue(userAtom);
   const location = useLocation();
-  console.log("Nav rendered");
+
+  const onError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = NoProfilePictureIcon;
+  };
   return (
     <StyledNav>
       <HomeLink />
-      <StyledImg src={user?.photoURL || undefined} />
+      <StyledImg
+        src={user?.photoURL || undefined}
+        alt="User Profile Picture"
+        onError={onError}
+      />
       {user ? (
         <SignOutButton />
       ) : location.pathname !== paths.login ? (

@@ -6,7 +6,7 @@ import { paths } from "@src/router";
 import { userAtom } from "@src/atoms";
 import { Button, Img } from "@src/elements";
 import { signInWithGoogle } from "@src/firebase";
-import GoogleIcon from "@src/assets/icons/google_icon256.png";
+import GoogleIcon from "@src/assets/icons/google256.png";
 
 const StyledButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.white} !important;

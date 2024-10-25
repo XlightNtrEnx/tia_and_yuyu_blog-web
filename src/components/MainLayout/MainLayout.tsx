@@ -11,7 +11,6 @@ const Container = styled.div`
 `;
 
 export function MainLayout() {
-  console.log("MainLayout rendered");
   return (
     <Container id="app">
       <Nav />
