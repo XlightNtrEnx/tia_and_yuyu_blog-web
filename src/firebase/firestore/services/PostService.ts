@@ -1,12 +1,12 @@
 import { BaseSchema, BaseService } from "./BaseService";
 
 export interface IPost extends BaseSchema {
-  title?: string;
   text: string;
+  title?: string;
+  userId: string | null;
 }
 
-export type PostInsertionAttributes = Pick<IPost, "text"> &
-  Partial<Pick<IPost, "title">>;
+export type PostInsertionAttributes = IPost;
 
 class PostService extends BaseService<IPost, PostInsertionAttributes> {
   constructor() {

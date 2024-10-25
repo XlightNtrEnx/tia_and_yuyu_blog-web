@@ -1,11 +1,10 @@
 import { styled } from "styled-components";
 import { ChangeEvent, FormEvent, useState, FocusEvent } from "react";
+import { useAtomValue } from "jotai";
 
+import { userAtom } from "@src/atoms";
 import { TextArea, Form, Button, Input } from "@src/elements";
-import {
-  PostInsertionAttributes,
-  postService,
-} from "@src/firebase/firestore/services";
+import { postService } from "@src/firebase/firestore/services";
 
 const StyledTextArea = styled(TextArea)`
   border: none;
@@ -41,16 +40,19 @@ const StyledInput = styled(Input)`
 
 const onSubmit = async (
   e: FormEvent<HTMLFormElement>,
-  post: PostInsertionAttributes
+  insertionParams: Parameters<typeof postService.insert>[0]
 ) => {
   e.preventDefault();
-  await postService.insert(post);
+  await postService.insert(insertionParams);
   window.location.reload();
 };
 
 export const PostComposer = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const user = useAtomValue(userAtom);
+  const userId = user?.uid ?? null;
+
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -64,7 +66,7 @@ export const PostComposer = () => {
   };
 
   return (
-    <StyledForm onSubmit={(e) => onSubmit(e, { text, title })}>
+    <StyledForm onSubmit={(e) => onSubmit(e, { text, title, userId })}>
       <StyledInput
         name="title"
         placeholder="Title (optional)"

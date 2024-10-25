@@ -58,6 +58,8 @@ export abstract class BaseService<
     if (options?.limit) w.push(limit(options.limit));
     const q = query(this.collection, ...w);
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map((doc) => doc.data() as Schema);
+    return querySnapshot.docs.map(
+      (doc) => ({ id: doc.id, ...doc.data() } as Schema)
+    );
   }
 }

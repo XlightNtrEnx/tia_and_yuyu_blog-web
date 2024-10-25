@@ -19,6 +19,8 @@ const Container = styled.div`
 
 export const HomePage = () => {
   const user = useAtomValue(userAtom);
+  console.log(user);
+  console.log("HomePage rendered");
   return (
     <Container>
       {(user?.email === "xyf.oco@gmail.com" ||

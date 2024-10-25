@@ -29,13 +29,14 @@ export const Feed = () => {
     };
     fetchPosts();
   }, []);
+  console.log(posts);
 
   return (
     <>
       {!loading && (
         <Container>
           {posts.map((post) => (
-            <Post post={post} />
+            <Post post={post} key={post.id} />
           ))}
         </Container>
       )}
