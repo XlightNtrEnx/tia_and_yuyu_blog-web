@@ -6,11 +6,15 @@ import { storage } from "@src/firebase/storage";
 export abstract class BaseService<SubPaths> {
   protected _basePath: string = "";
 
-  get basePath() {
+  public get basePath() {
+    return this.getBasePath();
+  }
+
+  getBasePath() {
     return this._basePath;
   }
 
-  set basePath(basePath: string) {
+  public set basePath(basePath: string) {
     if (!(basePath.length > 1)) {
       throw new Error("basePath have to be at least 2 characters long");
     } else if (!basePath.endsWith("/")) {

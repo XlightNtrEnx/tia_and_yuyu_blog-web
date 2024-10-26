@@ -1,13 +1,14 @@
 import { BaseService } from "./BaseService";
 
-enum UserSubPaths {
-  PROFILE_PICTURE_URL = "profile-picture-url/",
+export enum UserSubPaths {
+  PROFILE_PICTURE = "profile-picture/",
 }
 
 export class UserService extends BaseService<UserSubPaths> {
   _targetUserId: string = "";
 
   get targetUserId() {
+    if (!this._targetUserId) throw new Error("targetUserId is not set.");
     return this._targetUserId;
   }
 
@@ -15,7 +16,7 @@ export class UserService extends BaseService<UserSubPaths> {
     this._targetUserId = value;
   }
 
-  get basePath() {
+  override getBasePath() {
     return `${this._basePath}/${this.targetUserId}/`;
   }
 

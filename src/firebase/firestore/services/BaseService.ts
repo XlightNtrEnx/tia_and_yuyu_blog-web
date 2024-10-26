@@ -1,12 +1,13 @@
 import {
   collection,
-  addDoc,
   serverTimestamp,
   query,
   where,
   getDocs,
   orderBy,
   limit,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 
 import { db } from "@src/firebase/firestore";
@@ -33,13 +34,24 @@ export abstract class BaseService<
   }
 
   async insert(
-    schema: Omit<InsertionAttributes, "id" | "createdAt" | "updatedAt">
+    schema: Omit<InsertionAttributes, "id" | "createdAt" | "updatedAt"> & {
+      id?: string;
+    }
   ) {
-    const docRef = await addDoc(this.collection, {
+    let docRef: ReturnType<typeof doc>;
+    const data: Record<string, any> = {
       ...schema,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-    });
+    };
+    if (schema.id) {
+      docRef = doc(this.collection, schema.id);
+    } else {
+      docRef = doc(this.collection);
+      delete data.id;
+    }
+
+    await setDoc(docRef, data);
     return docRef.id;
   }
 
@@ -49,7 +61,7 @@ export abstract class BaseService<
   ) {
     const keysAndValues = Object.entries(schema);
     const w: any[] = keysAndValues.map(([key, value]) =>
-      where(key, "==", value)
+      key === "id" ? where("__name__", "==", value) : where(key, "==", value)
     );
     if (options?.orderBy)
       w.push(
