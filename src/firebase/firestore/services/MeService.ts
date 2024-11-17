@@ -3,7 +3,7 @@ import {
   UserSubPaths,
 } from "@src/firebase/storage/services";
 
-import { UserService } from "./UserService";
+import { UserService, IUser } from "./UserService";
 
 export class MeService extends UserService {
   _targetUserId = "";
@@ -38,9 +38,14 @@ export class MeService extends UserService {
     return super.insert(s);
   }
 
-  async get() {
+  async getOrInsert(
+    schema?: Parameters<UserService["insert"]>[0]
+  ): Promise<IUser> {
     const result = await super.filter({ id: this.targetUserId });
-    if (result.length === 0) return null;
+    if (result.length === 0) {
+      if (!schema) throw new Error("User not found and no schema provided");
+      const id = this.insert(schema);
+    }
     return result[0];
   }
 }
