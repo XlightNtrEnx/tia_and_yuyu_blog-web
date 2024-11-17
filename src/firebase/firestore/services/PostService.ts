@@ -6,7 +6,10 @@ export interface IPost extends BaseSchema {
   userId: string | null;
 }
 
-export type PostInsertionAttributes = IPost;
+export type PostInsertionAttributes = Omit<
+  IPost,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 class PostService extends BaseService<IPost, PostInsertionAttributes> {
   constructor() {

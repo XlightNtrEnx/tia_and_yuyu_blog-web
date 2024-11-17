@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
 import { useAtomValue } from "jotai";
 import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
+import { meService as meStorageService } from "@src/firebase/storage/services";
 import { userAtom } from "@src/atoms";
 import { paths } from "@src/router";
 import Pochacco from "@src/assets/images/pochacco.png";
@@ -49,7 +51,18 @@ const StyledImg = styled(Img)`
 
 export const Nav = () => {
   const user = useAtomValue(userAtom);
+  const [src, setSrc] = useState<string>(NoProfilePictureIcon);
   const location = useLocation();
+
+  useEffect(() => {
+    async function fetchProfilePic() {
+      let url = "";
+      if (user && user.profilePicStoragePath)
+        url = await meStorageService.getDownloadURL(user.profilePicStoragePath);
+      setSrc(url);
+    }
+    fetchProfilePic();
+  }, [user]);
 
   const onError = (event: React.SyntheticEvent<HTMLImageElement, Event>) => {
     event.currentTarget.src = NoProfilePictureIcon;
@@ -57,11 +70,7 @@ export const Nav = () => {
   return (
     <StyledNav>
       <HomeLink />
-      <StyledImg
-        src={user?.photoURL || undefined}
-        alt="User Profile Picture"
-        onError={onError}
-      />
+      <StyledImg src={src} alt="User Profile Picture" onError={onError} />
       {user ? (
         <SignOutButton />
       ) : location.pathname !== paths.login ? (

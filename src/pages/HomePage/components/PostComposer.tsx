@@ -51,7 +51,7 @@ export const PostComposer = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const user = useAtomValue(userAtom);
-  const userId = user?.uid ?? null;
+  const userId = user?.id ?? null;
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);

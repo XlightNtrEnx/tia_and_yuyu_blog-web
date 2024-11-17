@@ -1,4 +1,7 @@
 import { atom } from "jotai";
-import { User } from "firebase/auth";
+
+import { IUser } from "@src/firebase/firestore/services";
+
+export type User = Omit<IUser, "createdAt" | "updatedAt">;
 
 export const userAtom = atom<User | null>(null);

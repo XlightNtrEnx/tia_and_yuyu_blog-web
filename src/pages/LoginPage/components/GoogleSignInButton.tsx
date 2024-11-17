@@ -1,9 +1,7 @@
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from "jotai";
 
 import { paths } from "@src/router";
-import { userAtom } from "@src/atoms";
 import { Button, Img } from "@src/elements";
 import { signInWithGoogle } from "@src/firebase";
 import GoogleIcon from "@src/assets/icons/google256.png";
@@ -21,12 +19,10 @@ const StyledButton = styled(Button)`
 `;
 
 export const GoogleSignInButton = () => {
-  const setUser = useSetAtom(userAtom);
   const navigate = useNavigate();
 
   const onClick = async () => {
-    const { user } = await signInWithGoogle();
-    setUser(user);
+    await signInWithGoogle();
     navigate(paths.home);
   };
 

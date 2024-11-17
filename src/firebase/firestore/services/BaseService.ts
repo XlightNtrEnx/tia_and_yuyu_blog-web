@@ -8,6 +8,7 @@ import {
   limit,
   doc,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 
 import { db } from "@src/firebase/firestore";
@@ -23,9 +24,13 @@ export enum Order {
   DESC = "desc",
 }
 
+/**
+ * @type Schema: The schema of the document
+ * @type InsertionSchema: The schema of the document when inserting. Should omit createdAt and updatedAt
+ */
 export abstract class BaseService<
   Schema extends BaseSchema,
-  InsertionAttributes extends Partial<Schema>
+  InsertionSchema extends Partial<Schema>
 > {
   private collection: ReturnType<typeof collection>;
 
@@ -34,25 +39,41 @@ export abstract class BaseService<
   }
 
   async insert(
-    schema: Omit<InsertionAttributes, "id" | "createdAt" | "updatedAt"> & {
-      id?: string;
-    }
-  ) {
-    let docRef: ReturnType<typeof doc>;
-    const data: Record<string, any> = {
+    schema: InsertionSchema
+  ): Promise<Omit<Schema, "createdAt" | "updatedAt">> {
+    const data: Record<string, any> = await this.processInsertionData({
       ...schema,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
-    if (schema.id) {
-      docRef = doc(this.collection, schema.id);
+    });
+    data.createdAt = serverTimestamp();
+    data.updatedAt = serverTimestamp();
+
+    let docRef: ReturnType<typeof doc>;
+    if (data.id) {
+      docRef = doc(this.collection, data.id);
+      delete data.id;
     } else {
       docRef = doc(this.collection);
-      delete data.id;
     }
 
     await setDoc(docRef, data);
-    return docRef.id;
+    schema.id = docRef.id;
+    return schema as unknown as Omit<Schema, "createdAt" | "updatedAt">;
+  }
+
+  /**
+   * It is safe to modify the schema in place
+   */
+  async processInsertionData(
+    schema: Parameters<(typeof this)["insert"]>[0]
+  ): Promise<Parameters<(typeof this)["insert"]>[0]> {
+    return schema;
+  }
+
+  async findOne(schema: Partial<Schema>): Promise<Schema | null> {
+    const result = await this.filter(schema, {
+      limit: 1,
+    });
+    return result[0] || null;
   }
 
   async filter(
@@ -64,14 +85,20 @@ export abstract class BaseService<
       key === "id" ? where("__name__", "==", value) : where(key, "==", value)
     );
     if (options?.orderBy)
-      w.push(
-        orderBy(options.orderBy.by as string, options.orderBy.order as Order)
-      );
+      w.push(orderBy(options.orderBy.by as string, options.orderBy.order));
     if (options?.limit) w.push(limit(options.limit));
     const q = query(this.collection, ...w);
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(
-      (doc) => ({ id: doc.id, ...doc.data() } as Schema)
-    );
+    return querySnapshot.docs.map((doc) => {
+      const result = doc.data() as Schema;
+      result.id = doc.id;
+      return result;
+    });
+  }
+
+  async exists(id: string) {
+    const docRef = doc(this.collection, id);
+    const docSnap = await getDoc(docRef);
+    return docSnap.exists();
   }
 }
