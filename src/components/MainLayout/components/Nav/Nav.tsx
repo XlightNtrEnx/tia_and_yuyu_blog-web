@@ -58,7 +58,9 @@ export const Nav = () => {
     async function fetchProfilePic() {
       let url = "";
       if (user && user.profilePicStoragePath)
-        url = await meStorageService.getDownloadURL(user.profilePicStoragePath);
+        url = await meStorageService.getDownloadURLFromStorageURL(
+          user.profilePicStoragePath
+        );
       setSrc(url);
     }
     fetchProfilePic();

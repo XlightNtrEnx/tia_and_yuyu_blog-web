@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { storage } from "@src/firebase/storage";
 
-export abstract class BaseService<SubPaths> {
+export abstract class BaseService<Paths> {
   protected _basePath: string = "";
 
   public get basePath() {
@@ -27,16 +27,17 @@ export abstract class BaseService<SubPaths> {
     this.basePath = basePath;
   }
 
-  async uploadFile(file: File, subPath?: SubPaths) {
-    const path = `${this.basePath}${subPath}${uuidv4()}-${file.name}`;
-    const storageRef = ref(storage, path);
+  async uploadFile(file: File, path?: Paths) {
+    const filepath = `${this.basePath}${path}${uuidv4()}-${file.name}`;
+    const storageRef = ref(storage, filepath);
     await uploadBytes(storageRef, file);
     const downloadURL = await getDownloadURL(storageRef);
     return downloadURL;
   }
 
-  async getDownloadURL(path: string) {
+  async getDownloadURLFromStorageURL(path: string) {
     const storageRef = ref(storage, path);
-    return getDownloadURL(storageRef);
+    const downloadURL = await getDownloadURL(storageRef);
+    return downloadURL;
   }
 }

@@ -1,12 +1,15 @@
 import { styled } from "styled-components";
+import { forwardRef } from "react";
 
-const StyledInput = styled.input`
-  min-height: 2rem;
-  border-radius: 10px;
-  outline: none;
-  border: 2px solid black;
-`;
+const StyledInput = styled.input``;
 
 export const Input = ({ ...props }) => {
   return <StyledInput {...props} />;
 };
+
+export const HiddenFileInput = forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>((props, ref) => {
+  return <input type="file" style={{ display: "none" }} ref={ref} {...props} />;
+});

@@ -36,7 +36,6 @@ export class UserService extends BaseUserService {
   async processInsertionData(schema: UserInsertionAttributes) {
     if (schema.profilePicURL) {
       try {
-        console.log("poop");
         const response = await fetch(schema.profilePicURL);
         const blob = await response.blob();
         if (!blob.type.startsWith("image/"))
