@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ChangeEvent, FormEvent, useState, FocusEvent, useRef } from "react";
+import { ChangeEvent, FormEvent, useState, useRef } from "react";
 import { useAtomValue } from "jotai";
 
 import { ReactComponent as AttachmentSVG } from "@src/assets/svgs/attachment.svg";
@@ -43,7 +43,7 @@ const TextContentInput = styled(TextArea)`
   outline: none;
 `;
 
-const FilePreviewBar = styled(FlexRow)``;
+// const FilePreviewBar = styled(FlexRow)``;
 
 const ActionBar = styled(FlexRow)`
   justify-content: space-between;
@@ -76,7 +76,7 @@ const _files: File[] = [];
 export const PostComposer = () => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [,] = useState<File[]>([]);
   const user = useAtomValue(userAtom);
   const userId = user?.id ?? null;
 
